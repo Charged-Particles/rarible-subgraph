@@ -1,0 +1,260 @@
+{
+  universes(first: 5) {
+    id
+    owner
+    chargedParticles {
+      id
+      universe {
+        id
+      }
+      chargedState {
+        id
+        nftState {
+          id
+          contractAddress
+          tokenId
+          lastKnownOwner
+          dischargeApproval
+          releaseApproval
+          breakBondApproval
+          timelockApproval
+          dischargeTimelockExpiry
+          dischargeTimelockLockedBy
+          releaseTimelockExpiry
+          releaseTimelockLockedBy
+          breakBondTimelockExpiry
+          breakBondTimelockLockedBy
+          tempLockExpiry
+          restrictChargeFromAny
+          allowDischargeFromAny
+          allowReleaseFromAny
+          restrictBondFromAny
+          allowBreakBondFromAny
+        }
+      }
+      chargedSettings {
+        id
+        depositCaps {
+          id
+          assetToken
+          maxDeposit
+        }
+        tempLockExpiryBlocks
+        nftSettings {
+          id
+          contractAddress
+          requiredWalletManager
+          requiredBasketManager
+          allowedAssetTokens {
+            id
+          }
+          assetDepositMin
+          assetDepositMax
+          maxNfts {
+            id
+            maxNfts
+          }
+          allowCharge
+          allowBond
+          allowTimelockAnyNft
+          allowTimelockOwnNft
+          hasRestrictedAssets
+        }
+        nftCreatorSettings {
+          id
+          contractAddress
+          tokenId
+          creatorAddress
+          annuityPercent
+          annuityRedirect
+        }
+        genericBasketManager {
+          id
+          name
+          address
+          paused
+          baskets {
+            id
+            contractAddress
+            tokenId
+            address
+            totalTokens
+            tokenBalances {
+              id
+              nftTokenAddress
+              nftTokenIds
+            }
+          }
+        }
+        genericWalletManager {
+          id
+          name
+          address
+          paused
+          wallets {
+            id
+            contractAddress
+            tokenId
+            address
+            assetTokens
+            assetBalances {
+              id
+              assetToken
+              principal
+            }
+          }
+        }
+        aaveWalletManager {
+          id
+          name
+          address
+          paused
+          aaveBridge
+          wallets {
+            id
+            contractAddress
+            tokenId
+            address
+            nftCreator
+            nftCreatorAnnuityPct
+            nftCreatorAnnuityRedirect
+            assetTokens
+            assetBalances {
+              id
+              assetToken
+              principal
+            }
+          }
+        }
+      }
+    }
+    ionxToken {
+      id
+      owner
+      holders {
+        id
+        address
+        balance
+      }
+    }
+    ionxMaxSupply
+    protonToken {
+      id
+      owner
+      paused
+      tokens {
+        id
+        tokenId
+        owner
+        creator
+        particleType
+        creatorAnnuity
+        salePrice
+        lastSalePrice
+        resaleRoyalties
+        resaleRoyaltiesRedirect
+        claimableRoyalties
+
+        metadataUri
+        name
+        description
+        external_url
+        animation_url
+        youtube_url
+        icon
+        thumbnail
+        image
+        symbol
+        decimals
+        background_color
+        attributes {
+          id
+          name
+          value
+        }
+      }
+    }
+    leptonToken {
+      id
+      owner
+      paused
+      typeIndex
+      maxSupply
+      maxMintPerTx
+      tokens {
+        id
+        tokenId
+        owner
+        price
+        supply
+        multiplier
+        bonus
+        metadataUri
+        name
+        description
+        external_url
+        animation_url
+        youtube_url
+        thumbnail
+        image
+        symbol
+      }
+    }
+    esaMultiplier {
+      id
+      assetToken
+      multiplier
+    }
+    esaLevel {
+      id
+      address
+      level
+    }
+    royaltiesClaimedByAccount {
+      id
+      accountAddress
+      royaltiesClaimed
+    }
+    approvedOperator {
+      id
+      assetAddress
+      ownerAddress
+      operatorAddress
+      tokenIds
+    }
+    assetTokenAnalytics {
+      id
+      totalAssetsLocked
+      totalAssetsLockedERC20
+      totalAssetsLockedAave
+    }
+    nftAnalytics {
+      id
+      contractAddress
+      tokenId
+      totalSalesVolume
+      totalRoyalties
+      numSales
+    }
+    profileMetrics {
+      id
+      totalEthEarned
+      mintProton
+      buyProton
+      sellProton
+      royaltiesClaimed
+      energizeERC20
+      energizeAave
+      dischargeInterest
+      releaseMass
+      buyLepton
+      transferLepton
+    }
+  }
+  platformMetrics {
+    id
+    platformEthEarned
+    platformProtonsMinted
+    platformInterestDischarged
+  }
+}

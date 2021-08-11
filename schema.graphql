@@ -1,0 +1,683 @@
+
+# ID: `${nft.address}-${nft.id}`
+# dynamically generated type, not mapped to a specific contract
+type StandardNFT @entity {
+  id: ID!
+  tokenAddress: Bytes!
+  tokenId: BigInt!
+  owner: Bytes
+
+  metadataUri: String
+  name: String
+  description: String
+  external_url: String
+  icon: String
+  image: String
+  symbol: String
+
+  attributes: [StandardNftAttributes!]! @derivedFrom(field: "standardNft")
+}
+
+type StandardNftAttributes @entity {
+  id: ID!
+  standardNft: StandardNFT!
+  name: String
+  value: String
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ID: `${universe.address}`
+type Universe @entity {
+  id: ID!
+  owner: Bytes!
+
+  chargedParticles: ChargedParticles
+  ionxToken: Ionx
+  ionxMaxSupply: BigInt
+  protonToken: Proton
+  leptonToken: Lepton
+  esaMultiplier: [ESAMultiplier!]! @derivedFrom(field: "universe")
+  esaLevel: [ESALevel!]! @derivedFrom(field: "universe")
+}
+
+# ID: `${chargedParticles.address}`
+type ChargedParticles @entity {
+  id: ID!
+  owner: Bytes!
+
+  universe: Universe
+  chargedSettings: ChargedSettings
+  chargedState: ChargedState
+  leptonToken: Lepton
+}
+
+# ID: `${chargedSettings.address}`
+type ChargedSettings @entity {
+  id: ID!
+  owner: Bytes!
+
+  depositCaps: [DepositCap!]! @derivedFrom(field: "chargedSettings")
+  tempLockExpiryBlocks: BigInt
+
+  nftSettings: [NftSettings!]! @derivedFrom(field: "chargedSettings")
+  nftCreatorSettings: [NftCreatorSettings!]! @derivedFrom(field: "chargedSettings")
+
+  # Various WalletManagers listed here
+  genericBasketManager: GenericBasketManager
+  genericWalletManager: GenericWalletManager
+  aaveWalletManager: AaveWalletManager
+}
+
+# ID: `${contractAddress.address}`
+# dynamically generated type, not mapped to a specific contract
+type NftSettings @entity {
+  id: ID!
+  chargedSettings: ChargedSettings!
+  contractAddress: Bytes!
+
+  requiredWalletManager: String
+  requiredBasketManager: String
+
+  allowedAssetTokens: [AllowedAssetToken!]! @derivedFrom(field: "nftSettings")
+  assetDepositMin: BigInt
+  assetDepositMax: BigInt
+
+  maxNfts: [MaxNfts!]! @derivedFrom(field: "nftSettings")
+
+  # Action Perms
+  allowCharge: Boolean
+  allowBond: Boolean
+  allowTimelockAnyNft: Boolean
+  allowTimelockOwnNft: Boolean
+  hasRestrictedAssets: Boolean
+}
+
+
+# ID: `${contractAddress.address}-${assetToken.address}`
+# dynamically generated type, not mapped to a specific contract
+type AllowedAssetToken @entity {
+  id: ID!
+  nftSettings: NftSettings!
+
+  assetToken: Bytes
+  isAllowed: Boolean
+}
+
+
+# ID: `${chargedSettings.address}-${assetToken.address}`
+# dynamically generated type, not mapped to a specific contract
+type DepositCap @entity {
+  id: ID!
+  chargedSettings: ChargedSettings!
+
+  assetToken: Bytes
+  maxDeposit: BigInt
+}
+
+
+# ID: `${contract.address}-${assetToken.address}`
+# dynamically generated type, not mapped to a specific contract
+type MaxNfts @entity {
+  id: ID!
+  nftSettings: NftSettings!
+
+  tokenAddress: Bytes
+  maxNfts: BigInt
+}
+
+
+# ID: `${contractAddress.address}-${tokenId}-${creatorAddress.address}`
+# dynamically generated type, not mapped to a specific contract
+type NftCreatorSettings @entity {
+  id: ID!
+  chargedSettings: ChargedSettings!
+  contractAddress: Bytes!
+
+  tokenId: BigInt!
+  creatorAddress: Bytes!
+
+  annuityPercent: BigInt
+  annuityRedirect: Bytes
+}
+
+
+# ID: `${chargedState.address}`
+type ChargedState @entity {
+  id: ID!
+  owner: Bytes!
+
+  nftState: [NftState!]! @derivedFrom(field: "chargedState")
+}
+
+# ID: `${contractAddress.address}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type NftState @entity {
+  id: ID!
+  chargedState: ChargedState!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+  lastKnownOwner: Bytes
+
+  dischargeApproval: Bytes
+  releaseApproval: Bytes
+  breakBondApproval: Bytes
+  timelockApproval: Bytes
+
+  dischargeTimelockExpiry: BigInt
+  dischargeTimelockLockedBy: Bytes
+
+  releaseTimelockExpiry: BigInt
+  releaseTimelockLockedBy: Bytes
+
+  breakBondTimelockExpiry: BigInt
+  breakBondTimelockLockedBy: Bytes
+
+  tempLockExpiry: BigInt
+
+  # Action Perms
+  restrictChargeFromAny: Boolean
+  allowDischargeFromAny: Boolean
+  allowReleaseFromAny: Boolean
+  restrictBondFromAny: Boolean
+  allowBreakBondFromAny: Boolean
+}
+
+
+# ID: `${genericBasketManager.address}`
+type GenericBasketManager @entity {
+  id: ID!
+  owner: Bytes!
+  name: String!
+  address: Bytes!
+  paused: Boolean!
+
+  chargedParticles: Bytes
+
+  baskets: [GenericSmartBasket!]! @derivedFrom(field: "basketManager")
+}
+
+# ID: `${contractAddress}-${tokenId}`
+type GenericSmartBasket @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  address: Bytes
+  basketManager: GenericBasketManager
+  totalTokens: BigInt!
+
+  tokenBalances: [GenericNftTokenBalance!]! @derivedFrom(field: "smartBasket")
+}
+
+# ID: `${nftToken.address}-${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type GenericNftTokenBalance @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  nftTokenAddress: Bytes!
+
+  smartBasket: GenericSmartBasket
+
+  nftTokenIds: [BigInt!]
+}
+
+# ID: `${genericWalletManager.address}`
+type GenericWalletManager @entity {
+  id: ID!
+  owner: Bytes!
+  name: String!
+  address: Bytes!
+  paused: Boolean!
+
+  chargedParticles: Bytes
+
+  wallets: [GenericSmartWallet!]! @derivedFrom(field: "walletManager")
+}
+
+# ID: `${contractAddress}-${tokenId}`
+type GenericSmartWallet @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  address: Bytes
+  walletManager: GenericWalletManager
+  assetTokens: [Bytes!]
+
+  assetBalances: [GenericAssetTokenBalance!]! @derivedFrom(field: "smartWallet")
+}
+
+# ID: `${assetToken.address}-${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type GenericAssetTokenBalance @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+  smartWallet: GenericSmartWallet
+
+  assetToken: Bytes!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+
+  principal: BigInt!
+}
+
+# ID: `${aaveWalletManager.address}`
+type AaveWalletManager @entity {
+  id: ID!
+  owner: Bytes!
+  name: String!
+  address: Bytes!
+  paused: Boolean!
+
+  chargedParticles: Bytes
+  aaveBridge: Bytes
+
+  wallets: [AaveSmartWallet!]! @derivedFrom(field: "walletManager")
+}
+
+# ID: `${contractAddress}-${tokenId}`
+type AaveSmartWallet @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  address: Bytes
+  walletManager: AaveWalletManager
+  assetTokens: [Bytes!]
+
+  nftCreator: Bytes
+  nftCreatorAnnuityPct: BigInt
+  nftCreatorAnnuityRedirect: Bytes
+
+  assetBalances: [AaveAssetTokenBalance!]! @derivedFrom(field: "smartWallet")
+}
+
+# ID: `${assetToken.address}-${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type AaveAssetTokenBalance @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+  smartWallet: AaveSmartWallet
+
+  assetToken: Bytes!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+
+  principal: BigInt!
+  ownerInterestDischarged: BigInt!
+  creatorInterestDischarged: BigInt!
+}
+
+
+
+# ID: `${wBoson.address}-${account.address}`
+type WBoson @entity {
+  id: ID!
+  wBoson: Bytes!
+  account: Bytes!
+  discarded: Boolean!
+
+  wBosonUri: String
+
+  name: String
+  description: String
+  thumbnail: String
+  image: String
+
+  email: String
+  twitter: String
+  website: String
+}
+
+
+
+# ID: `${ion.address}`
+type Ionx @entity {
+  id: ID!
+  owner: Bytes!
+  universe: Universe
+
+  holders: [IonxHolder!]! @derivedFrom(field: "ionx")
+}
+
+# ID: `${ion.address}-${holder.address}`
+# dynamically generated type, not mapped to a specific contract
+type IonxHolder @entity {
+  id: ID!
+  ionx: Ionx!
+  address: Bytes!
+
+  balance: BigInt!
+}
+
+# ID: `${universe.address}-${assetToken.address}`
+# dynamically generated type, not mapped to a specific contract
+type ESAMultiplier @entity {
+  id: ID!
+  universe: Universe!
+
+  assetToken: Bytes!
+  multiplier: BigInt!
+}
+
+# ID: `${universe.address-${accountAddress}`
+# dynamically generated type, not mapped to a specific contract
+type ESALevel @entity {
+  id: ID!
+  universe: Universe!
+
+  accountAddress: Bytes!
+  level: BigInt!
+}
+
+# ID: `${proton.address}`
+type Proton @entity {
+  id: ID!
+  owner: Bytes!
+  paused: Boolean
+
+  universe: Universe
+  chargedSettings: ChargedSettings
+  chargedState: ChargedState
+  chargedParticles: ChargedParticles
+
+  tokens: [ProtonNFT!]! @derivedFrom(field: "proton")
+}
+
+# ID: `${proton.address}-${nft.id}`
+# dynamically generated type, not mapped to a specific contract
+type ProtonNFT @entity {
+  id: ID!
+  tokenId: BigInt!
+  proton: Proton
+  creator: Bytes
+  owner: Bytes
+
+  overallSalesTotal: BigInt!
+
+  particleType: String
+  creatorAnnuity: BigInt
+
+  salePrice: BigInt
+  lastSalePrice: BigInt
+
+  resaleRoyalties: BigInt
+  resaleRoyaltiesRedirect: Bytes
+
+  metadataUri: String
+  name: String
+  description: String
+  external_url: String
+  animation_url: String
+  youtube_url: String
+  icon: String
+  thumbnail: String
+  image: String
+  symbol: String
+  decimals: BigInt
+  background_color: String
+
+  attributes: [ProtonNftAttributes!]! @derivedFrom(field: "protonNft")
+}
+
+# ID: `${userAddress}`
+# dynamically generated type, not mapped to a specific contract
+type ProtonNftCount @entity {
+  id: ID!
+
+  createdCount: BigInt!
+  ownedCount: BigInt!
+}
+
+type ProtonNftAttributes @entity {
+  id: ID!
+  protonNft: ProtonNFT!
+  name: String
+  value: String
+}
+
+
+# ID: `${nft.address}-${nft.id}`
+# dynamically generated type, not mapped to a specific contract
+type StandardNFT @entity {
+  id: ID!
+  tokenAddress: Bytes!
+  tokenId: BigInt!
+  owner: Bytes
+
+  metadataUri: String
+  name: String
+  description: String
+  external_url: String
+  icon: String
+  image: String
+  symbol: String
+
+  attributes: [StandardNftAttributes!]! @derivedFrom(field: "standardNft")
+}
+
+type StandardNftAttributes @entity {
+  id: ID!
+  standardNft: StandardNFT!
+  name: String
+  value: String
+}
+
+
+# ID: `${lepton.address}`
+type Lepton @entity {
+  id: ID!
+  owner: Bytes!
+  paused: Boolean
+
+  totalMinted: BigInt
+  typeIndex: BigInt
+  maxSupply: BigInt
+  maxMintPerTx: BigInt
+
+  types: [LeptonClassification!]! @derivedFrom(field: "lepton")
+
+  tokens: [LeptonNFT!]! @derivedFrom(field: "lepton")
+}
+
+# ID: `${lepton2.address}`
+type Lepton2 @entity {
+  id: ID!
+  owner: Bytes!
+  paused: Boolean
+
+  totalMinted: BigInt
+  typeIndex: BigInt
+  maxSupply: BigInt
+  maxMintPerTx: BigInt
+
+  types: [LeptonClassification!]! @derivedFrom(field: "lepton2")
+
+  tokens: [LeptonNFT!]! @derivedFrom(field: "lepton2")
+}
+
+
+# ID: `${lepton.address}-${lepton.bonus}`
+# dynamically generated type, not mapped to a specific contract
+type LeptonClassification @entity {
+  id: ID!
+  lepton: Lepton
+  lepton2: Lepton2
+
+  metadataUri: String
+  price: BigInt
+  supply: BigInt
+  multiplier: BigInt
+  bonus: BigInt
+  upperBounds: BigInt
+}
+
+# ID: `${lepton.address}-${nft.id}`
+# dynamically generated type, not mapped to a specific contract
+type LeptonNFT @entity {
+  id: ID!
+  tokenId: BigInt!
+  lepton: Lepton
+  lepton2: Lepton2
+  owner: Bytes
+
+  price: BigInt
+  supply: BigInt
+  multiplier: BigInt
+  bonus: BigInt
+
+  metadataUri: String
+  name: String
+  description: String
+  external_url: String
+  animation_url: String
+  youtube_url: String
+  thumbnail: String
+  image: String
+  symbol: String
+}
+
+
+# ID: `${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type NftTxHistory @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  timestamp: BigInt!
+  eventType: String!
+  eventData: String!
+}
+
+# ID: `${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type NftTxCount @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  count: BigInt!
+}
+
+# ID: `${accountAddress}`
+# dynamically generated type, not mapped to a specific contract
+type UserRoyalty @entity {
+  id: ID!
+
+  accountAddress: Bytes!
+
+  claimableRoyalties: BigInt!
+  royaltiesClaimed: BigInt!
+}
+
+# ID: `${contractAddress}-${ownerAddress}`
+# dynamically generated type, not mapped to a specific contract
+type ApprovedOperator @entity {
+  id: ID!
+
+  operatorAddress: Bytes!
+  ownerAddress: Bytes!
+  assetAddress: Bytes!
+  tokenIds: [BigInt!]
+}
+
+# ID: `${assetTokenAddress}`
+# dynamically generated type, not mapped to a specific contract
+type AssetTokenAnalytic @entity {
+  id: ID!
+
+  totalAssetsLocked: BigInt!
+  totalAssetsLockedAave: BigInt!
+  totalAssetsLockedERC20: BigInt!
+}
+
+# ID: `${contractAddress}-${tokenId}`
+# dynamically generated type, not mapped to a specific contract
+type NftAnalytic @entity {
+  id: ID!
+
+  contractAddress: Bytes!
+  tokenId: BigInt!
+
+  totalSalesVolume: BigInt!
+  totalRoyalties: BigInt!
+  numSales: BigInt!
+}
+
+
+# ID: `${userAddress}`
+# dynamically generated type, not mapped to a specific contract
+type ProfileMetric @entity {
+  id: ID!
+
+  totalEthEarned: BigInt!
+  buyProtonCount: BigInt!
+  sellProtonCount: BigInt!
+  mintProtonCount: BigInt!
+  buyLeptonCount: BigInt!
+  transferLeptonCount: BigInt!
+  energizeAaveCount: BigInt!
+  energizeERC20Count: BigInt!
+  dischargeInterestCount: BigInt!
+  releaseMassCount: BigInt!
+  royaltiesClaimedCount: BigInt!
+}
+
+# ID: `${userAddress}-${assetTokenAddress}`
+# dynamically generated type, not mapped to a specific contract
+type UserTokenMetric @entity {
+  id: ID!
+
+  lifetimeValueLocked: BigInt!
+  totalMassReleased: BigInt!
+  totalInterestDischarged: BigInt!
+}
+
+# ID: `${contractAddress}`
+# dynamically generated type, not mapped to a specific contract
+type PlatformMetric @entity {
+  id: ID!
+
+  platformEthEarned: BigInt!
+  platformInterestDischarged: BigInt!
+  platformProtonsMinted: BigInt!
+}

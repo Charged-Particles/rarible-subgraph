@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: StandardNFT
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{rarible.address}}"
+      abi: ERC721
+      startBlock: {{rarible.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForRarible721.ts
+      entities:
+        - StandardNFT
+      abis:
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

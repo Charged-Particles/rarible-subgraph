@@ -1,0 +1,42 @@
+{
+  "name": "@charged-particles/rarible-subgraph",
+  "version": "1.0.0",
+  "description": "Subgraph for the Rarible Protocol",
+  "author": "Rob Secord <robsecord.eth>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Charged-Particles/rarible-subgraph"
+  },
+  "keywords": [
+    "charged",
+    "particles",
+    "defi",
+    "nft",
+    "subgraph",
+    "ethereum",
+    "rarible"
+  ],
+  "engines": {
+    "node": ">=12.16.1",
+    "npm": ">=6.14.4"
+  },
+  "scripts": {
+    "reinstall": "rm -rf node_modules/ && yarn",
+    "clean": "rm -rf build/ generated/",
+    "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.mainnet.yaml",
+    "gen:mainnet": "graph codegen subgraph.mainnet.yaml",
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ charged-particles/rarible-ethereum subgraph.mainnet.yaml",
+    "pub:beta": "yarn publish --tag beta --access public",
+    "pub:latest": "yarn publish --tag latest --access public",
+    "vbump": "version update -p",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "auth": "graph auth https://api.thegraph.com/deploy/"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.18.0",
+    "@graphprotocol/graph-ts": "0.18.1",
+    "mustache": "4.0.1"
+  }
+}
