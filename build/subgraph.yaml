@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - name: StandardNFT
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0xF6793dA657495ffeFF9Ee6350824910Abc21356C"
+      abi: ERC721
+      startBlock: 12617752
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: StandardNFT/StandardNFT.wasm
+      entities:
+        - StandardNFT
+      abis:
+        - name: ERC721
+          file: StandardNFT/abis/ERC721.json
+        - name: ERC1155
+          file: StandardNFT/abis/ERC1155.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

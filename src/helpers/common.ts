@@ -7,15 +7,19 @@ export const ONE = BigInt.fromI32(1);
 export const NEG_ONE = BigInt.fromI32(-1);
 
 
+export function hasAttr(obj: TypedMap<string, JSONValue>, key: string): boolean {
+  return (obj.isSet(key) && !obj.get(key).isNull());
+};
+
 export function getStringValue(obj: TypedMap<string, JSONValue>, key: string): string {
-  if (obj.isSet(key) && !obj.get(key).isNull()) {
+  if (hasAttr(obj, key)) {
     return obj.get(key).toString();
   }
   return '';
 };
 
 export function getBigIntValue(obj: TypedMap<string, JSONValue>, key: string): BigInt {
-  if (obj.isSet(key) && !obj.get(key).isNull()) {
+  if (hasAttr(obj, key)) {
     return obj.get(key).toBigInt();
   }
   return ZERO;
